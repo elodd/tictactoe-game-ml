@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tictactoe-game-ml"
+version = "0.1.0"
+description = "Terminal tic-tac-toe with an unbeatable minimax AI"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[project.scripts]
+tictactoe = "tictactoe.game:main"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools]
+packages = ["tictactoe", "tictactoe.model"]
