@@ -104,8 +104,7 @@ tictactoe-game-ml/
 │           ├── __init__.py         # Registry: load_model("minimax" | "mlmodel")
 │           ├── mlmodel.py          # MLP: forward pass, binary save/load, load_weights()
 │           └── build_mlmodel.py    # Trains mlmodel and writes mlmodel/mlmodel.bin
-├── mlmodel/                        # Output folder for generated weights
-│   ├── .gitkeep                    # Keeps the folder in git
+├── mlmodel/                        # Output folder for generated weight
 │   └── mlmodel.bin                 # Created by the build (git-ignored)
 ├── tests/
 │   ├── __init__.py
