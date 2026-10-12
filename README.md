@@ -49,7 +49,7 @@ cp env.example.json env.json
 | Key            | Values                       | Default  | Meaning              |
 |----------------|------------------------------|----------|----------------------|
 | `FIRST_PLAYER` | `human` or `ai`              | `human`  | Who opens each game. |
-| `DIFFICULTY`   | `strong`, `medium` or `weak` | `strong` | How hard the AI is.  |
+| `DIFFICULTY`   | `strong`, `medium` or `weak` | `medium` | How hard the AI is.  |
 
 If `env.json` is missing, or a key is missing from it, the default is used. An invalid value stops the program with an error message. `env.json` is git-ignored, and `env.example.json` is committed.
 
