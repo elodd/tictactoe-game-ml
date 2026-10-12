@@ -22,9 +22,14 @@ class LoadSettingsTests(unittest.TestCase):
         path.write_text(json.dumps(data), encoding="utf-8")
         return path
 
+    def test_default_path_is_project_root(self):
+        root = Path(__file__).resolve().parent.parent
+        self.assertEqual(settings.DEFAULT_ENV_PATH, root / "env.json")
+        self.assertTrue((settings.DEFAULT_ENV_PATH.parent / "env.example.json").exists())
+
     def test_defaults_when_no_file(self):
         cfg = settings.load_settings(self.dir / "missing.json")
-        self.assertEqual(cfg, {"FIRST_PLAYER": "human"})
+        self.assertEqual(cfg, {"FIRST_PLAYER": "human", "DIFFICULTY": "strong"})
 
     def test_defaults_when_key_missing(self):
         self.assertEqual(settings.load_settings(self.write({}))["FIRST_PLAYER"], "human")
@@ -35,6 +40,19 @@ class LoadSettingsTests(unittest.TestCase):
     def test_rejects_unknown_value(self):
         with self.assertRaises(ValueError):
             settings.load_settings(self.write({"FIRST_PLAYER": "random"}))
+
+    def test_defaults_difficulty_when_key_missing(self):
+        self.assertEqual(settings.load_settings(self.write({}))["DIFFICULTY"], "strong")
+
+    def test_reads_each_difficulty(self):
+        for level in ("strong", "medium", "weak"):
+            with self.subTest(level=level):
+                cfg = settings.load_settings(self.write({"DIFFICULTY": level}))
+                self.assertEqual(cfg["DIFFICULTY"], level)
+
+    def test_rejects_unknown_difficulty(self):
+        with self.assertRaises(ValueError):
+            settings.load_settings(self.write({"DIFFICULTY": "hard"}))
 
     def test_ai_first_moves_before_human(self):
         # Order: AI 0, human 4, AI 1, human 5, AI 2 -> AI completes the top row.

@@ -150,16 +150,16 @@ def main():
     from .settings import load_settings
 
     cfg = load_settings()
-    first = cfg["FIRST_PLAYER"]
-    from .model import load_model
+    first, difficulty = cfg["FIRST_PLAYER"], cfg["DIFFICULTY"]
+    from .model import load_model, with_difficulty
 
     try:
-        ai_move = load_model("mlmodel")
+        ai_move = with_difficulty(load_model("mlmodel"), difficulty)
     except FileNotFoundError as err:
         print(err)
         return
     scores = {"X": 0, "O": 0, "D": 0}
-    print("Tic-Tac-Toe vs AI")
+    print(f"Tic-Tac-Toe vs AI ({difficulty})")
     try:
         while True:
             play_round(scores, first, ai_move)

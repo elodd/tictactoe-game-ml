@@ -8,7 +8,9 @@ from pathlib import Path
 
 FIRST_PLAYER_OPTIONS = ("human", "ai")
 DEFAULT_FIRST_PLAYER = "human"
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DIFFICULTY_OPTIONS = ("strong", "medium", "weak")
+DEFAULT_DIFFICULTY = "strong"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_ENV_PATH = PROJECT_ROOT / "env.json"
 
 
@@ -22,4 +24,8 @@ def load_settings(path=None):
     first = values.get("FIRST_PLAYER", DEFAULT_FIRST_PLAYER)
     if first not in FIRST_PLAYER_OPTIONS:
         raise ValueError(f"FIRST_PLAYER must be one of {FIRST_PLAYER_OPTIONS}, got {first!r}")
-    return {"FIRST_PLAYER": first}
+
+    difficulty = values.get("DIFFICULTY", DEFAULT_DIFFICULTY)
+    if difficulty not in DIFFICULTY_OPTIONS:
+        raise ValueError(f"DIFFICULTY must be one of {DIFFICULTY_OPTIONS}, got {difficulty!r}")
+    return {"FIRST_PLAYER": first, "DIFFICULTY": difficulty}

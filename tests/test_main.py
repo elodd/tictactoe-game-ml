@@ -6,11 +6,11 @@ from unittest.mock import patch
 from src.tictactoe import game
 
 
-def run_main(inputs, first="human", ai_moves=None):
+def run_main(inputs, first="human", ai_moves=None, difficulty="strong"):
     """Run main() with scripted input and AI moves; return captured stdout."""
     feed = iter(inputs)
     out = io.StringIO()
-    settings = {"FIRST_PLAYER": first}
+    settings = {"FIRST_PLAYER": first, "DIFFICULTY": difficulty}
     scripted = patch.object(game, "best_ai_move", side_effect=ai_moves or [])
     with patch("builtins.input", lambda _: next(feed)), \
          patch("src.tictactoe.settings.load_settings", return_value=settings), \
@@ -97,6 +97,10 @@ class MainLoopTests(unittest.TestCase):
         self.assertEqual(out.count("New game."), 2)
         self.assertIn("Score  You: 2  AI: 0  Draws: 0", out)
 
+    def test_title_shows_difficulty(self):
+        out = run_main(["q"], difficulty="weak")
+        self.assertIn("Tic-Tac-Toe vs AI (weak)", out)
+
     def test_q_quits_mid_game_cleanly(self):
         out = run_main(["q"], first="human")
         self.assertIn("Thanks for playing.", out)
@@ -106,7 +110,7 @@ class MainLoopTests(unittest.TestCase):
         out = io.StringIO()
         with patch("builtins.input", side_effect=EOFError), \
              patch("src.tictactoe.settings.load_settings",
-                   return_value={"FIRST_PLAYER": "human"}), \
+                   return_value={"FIRST_PLAYER": "human", "DIFFICULTY": "strong"}), \
              patch("src.tictactoe.model.load_model", return_value=game.best_ai_move), \
              redirect_stdout(out):
             game.main()
